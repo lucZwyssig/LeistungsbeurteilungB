@@ -8,7 +8,7 @@ Folgendes muss auf dem System sein.
     - npm
 
 ## Projekt lokal installieren
-- mit git clone https://github.com/lucZwyssig/LeistungsbeurteilungB Projekt clonen
+- mit (git clone https://github.com/lucZwyssig/LeistungsbeurteilungB) Projekt clonen
 
 ## Setup
 Nötige Dependencies installieren / Projekt initialisieren
