@@ -1,0 +1,384 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "credentials",
+            "in": "body",
+            "description": "The credentials of the user. They must be correct to receive access to the API",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "email with an @ for example 123@321.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User successfully logged in ."
+          },
+          "401": {
+            "description": "Not autherized"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "415": {
+            "description": "User entered wrong email schema",
+            "schema": {
+              "type": "string",
+              "example": "not an email",
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/verify": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User successfully logged in .",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "you are logged in"
+                },
+                "cookie": {
+                  "type": "string",
+                  "example": "123@321.com"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "Not autherized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "you are not logged in"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "User successfully logged out ."
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User recieves objects .",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "334344344"
+                  },
+                  "createdDate": {
+                    "type": "string",
+                    "example": "2023-06-14"
+                  },
+                  "completedDate": {
+                    "type": "string",
+                    "example": "2023-06-16"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "3434344"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "cul@liamg.com"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "task",
+            "in": "body",
+            "description": "The task the user wants to post",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "createdDate": {
+                  "type": "string",
+                  "example": "2023-06-14"
+                },
+                "completedDate": {
+                  "type": "string",
+                  "example": "2023-06-16"
+                },
+                "title": {
+                  "type": "string",
+                  "example": "3434344"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User successfully posted task.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "334344344"
+                  },
+                  "createdDate": {
+                    "type": "string",
+                    "example": "2023-06-14"
+                  },
+                  "completedDate": {
+                    "type": "string",
+                    "example": "2023-06-16"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "3434344"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "cul@liamg.com"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "406": {
+            "description": "task doesnt follow schema"
+          },
+          "415": {
+            "description": "unsupported media type"
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the task that the user wants to get"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "gets task.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "334344344"
+                },
+                "createdDate": {
+                  "type": "string",
+                  "example": "2023-06-14"
+                },
+                "completedDate": {
+                  "type": "string",
+                  "example": "2023-06-16"
+                },
+                "title": {
+                  "type": "string",
+                  "example": "3434344"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "cul@liamg.com"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "task not found"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the task that the user wants to replace"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "createdDate": {
+                  "example": "any"
+                },
+                "completedDate": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "updates task.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "334344344"
+                },
+                "createdDate": {
+                  "type": "string",
+                  "example": "2023-06-14"
+                },
+                "completedDate": {
+                  "type": "string",
+                  "example": "2023-06-16"
+                },
+                "title": {
+                  "type": "string",
+                  "example": "3434344"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "cul@liamg.com"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "task not found"
+          },
+          "406": {
+            "description": "task not in correct format"
+          },
+          "415": {
+            "description": "task in not supported media type"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the task that the user wants to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "deleted task."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "task not found"
+          }
+        }
+      }
+    }
+  }
+}
