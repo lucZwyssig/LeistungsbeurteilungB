@@ -21,18 +21,32 @@ const tasks = [
 ];
 // daten von chat.openai.com generiert.
 
-const users =[]
+const users =["luc@gmail.com", "cul@liamg.com"]
 const correctPassword = "m295"
 
+const checkEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    return regex.test(email)
+    //regex kombination von chat.openai.com generiert
+  }
+
 app.post('/login', (req, res) => {
+
     if(!req.is('json')){
         res.sendStatus(415)
+        return
     }
-    const email = req.body.email;
+    const emailInput = req.body.email
+    const isEmail = checkEmail(emailInput)
+    if(!isEmail){
+        res.status(415).json("not an email")
+        return
+    }
+    
     //check type
     const userPassword = req.body.password
-    if(userPassword === correctPassword){
-        req.session.email = email
+    if(userPassword === correctPassword && users.find((email) => email === emailInput)){
+        req.session.email = emailInput
         res.sendStatus(200)
     }
     else{
@@ -49,6 +63,28 @@ const verify = (req, res, next) => {
         next()
     }
 } // von Library copiert
+
+
+app.get('/verify', (req, res) => {
+    if(!req.session.email){
+        res.status(401).json({
+            "status" : "you are not logged in"
+        })
+    }
+    else{
+        const email = req.session.email;
+        res.status(200).json({
+            "status": "you are logged in",
+            "cookie" : email
+        })
+    }
+})
+
+app.delete('/logout', (req, res) => {
+    req.session.destroy();
+    res.sendStatus(204)
+})
+
 
 
 app.get('/tasks', verify, (req, res) => {
@@ -154,6 +190,8 @@ app.delete('/tasks/:id', verify, (req, res) => {
 
 
 
-//do header
-// change no if wrong format
+
 app.listen(3000, () => console.log("server started"));
+
+//do Authentifizierung #9
+// do change no if wrong format
