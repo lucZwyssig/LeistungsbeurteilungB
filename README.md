@@ -27,7 +27,8 @@ Im Ordner Code:
 
 ## Ordnerstruktur
 - Der Code der API ist unter ./Code/Endpoints zu finden. 
-- Die Tests / Requests von Postman sind unter ./Tests/Postman.json zu finden
+- Die Tests / Requests von Postman sind unter ./Configuration/Postman.json zu finden
+- Git logs sind unter ./Configuration/log.txt zu finden
 
 
 
