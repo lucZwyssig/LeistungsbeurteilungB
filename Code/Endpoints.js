@@ -2,7 +2,16 @@ const express = require("express")
 const app = express()
 app.use(express.json())     
 const session = require('express-session')
-//do content type header
+
+app.use(
+    session({
+      secret: 'geheimnis',
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: false }
+    })
+  )
+// app.use von alten code kopiert
 
 const tasks = [
     { "id": "2020323", "createdDate": "2023-06-15", "completedDate": null, "title": "23423" },
@@ -12,14 +21,41 @@ const tasks = [
 ];
 // daten von chat.openai.com generiert.
 
-app.post('/login')
+const users =[]
+const correctPassword = "m295"
+
+app.post('/login', (req, res) => {
+    if(!req.is('json')){
+        res.sendStatus(415)
+    }
+    const email = req.body.email;
+    //check type
+    const userPassword = req.body.password
+    if(userPassword === correctPassword){
+        req.session.email = email
+        res.sendStatus(200)
+    }
+    else{
+        res.sendStatus(401)
+    }
+    
+})
+
+const verify = (req, res, next) => {
+    if(!req.session.email){
+        res.sendStatus(401)
+    }
+    else{
+        next()
+    }
+} // von Library copiert
 
 
-app.get('/tasks', (req, res) => {
+app.get('/tasks', verify, (req, res) => {
     res.status(200).json(tasks)
 })
 
-app.post('/tasks', (req, res) => {
+app.post('/tasks', verify, (req, res) => {
     const newTask = req.body
     if (!req.is("json")) {
         res.sendStatus(415)
@@ -50,7 +86,7 @@ app.post('/tasks', (req, res) => {
     }
 })
 
-app.get('/tasks/:id', (req, res) => {
+app.get('/tasks/:id', verify, (req, res) => {
     const taskID = req.params.id;
     const task = tasks.find((task) => task.id === taskID)
     if (task === -1) {
@@ -60,7 +96,7 @@ app.get('/tasks/:id', (req, res) => {
     }
 })
 
-app.put('/tasks/:id', (req, res) => {
+app.put('/tasks/:id', verify, (req, res) => {
     const taskID = req.params.id
     const newTask = req.body
     const taskIndex = tasks.findIndex((task) => task.id === taskID)
@@ -95,7 +131,7 @@ app.put('/tasks/:id', (req, res) => {
     }
 })
 
-app.delete('/tasks/:id', (req, res) => {
+app.delete('/tasks/:id', verify, (req, res) => {
     const taskID = req.params.id
     const taskIndex = tasks.findIndex((task) => task.id === taskID)
     if (taskIndex === -1) {
