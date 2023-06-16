@@ -16,7 +16,8 @@ Im Ordner Code:
 - npm init -y
 - npm install express
 - npm install express-session
-- npm install swagger-ui-express    
+- npm install swagger-ui-express
+- npm install swagger-autogen
     
 ## Verwendung
 - mit npm run start den Server starten
